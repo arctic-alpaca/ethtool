@@ -12,6 +12,8 @@ use crate::{
     try_ethtool, EthtoolCoalesceHandle, EthtoolError, EthtoolFeatureHandle,
     EthtoolFecHandle, EthtoolLinkModeHandle, EthtoolMessage,
     EthtoolPauseHandle, EthtoolRingHandle, EthtoolTsInfoHandle,
+    EthtoolLinkModeHandle, EthtoolMessage, EthtoolPauseHandle,
+    EthtoolRingHandle, EthtoolTsInfoHandle, EthtoolChannelHandle
 };
 
 #[derive(Clone, Debug)]
@@ -50,6 +52,10 @@ impl EthtoolHandle {
 
     pub fn fec(&mut self) -> EthtoolFecHandle {
         EthtoolFecHandle::new(self.clone())
+    }
+
+    pub fn channel(&mut self) -> EthtoolChannelHandle {
+        EthtoolChannelHandle::new(self.clone())
     }
 
     pub async fn request(
