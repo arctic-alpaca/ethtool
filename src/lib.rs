@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 mod bitset_util;
+mod channel;
 mod coalesce;
 mod connection;
 mod error;
@@ -14,11 +15,14 @@ mod message;
 mod pause;
 mod ring;
 mod tsinfo;
-mod channel;
 
 pub use self::fec::{
     EthtoolFecAttr, EthtoolFecGetRequest, EthtoolFecHandle, EthtoolFecMode,
     EthtoolFecStat,
+};
+pub use channel::{
+    EthtoolChannelAttr, EthtoolChannelGetRequest, EthtoolChannelHandle,
+    EthtoolChannelSetRequest,
 };
 pub use coalesce::{
     EthtoolCoalesceAttr, EthtoolCoalesceGetRequest, EthtoolCoalesceHandle,
@@ -45,10 +49,6 @@ pub use pause::{
 pub use ring::{EthtoolRingAttr, EthtoolRingGetRequest, EthtoolRingHandle};
 pub use tsinfo::{
     EthtoolTsInfoAttr, EthtoolTsInfoGetRequest, EthtoolTsInfoHandle,
-};
-pub use channel::{
-    EthtoolChannelAttr, EthtoolChannelGetRequest, EthtoolChannelHandle,
-    EthtoolChannelSetRequest,
 };
 
 pub(crate) use handle::ethtool_execute;

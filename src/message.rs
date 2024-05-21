@@ -6,6 +6,7 @@ use netlink_packet_utils::{
 };
 
 use crate::{
+    channel::{parse_channel_nlas, EthtoolChannelAttr},
     coalesce::{parse_coalesce_nlas, EthtoolCoalesceAttr},
     feature::{parse_feature_nlas, EthtoolFeatureAttr},
     fec::{parse_fec_nlas, EthtoolFecAttr},
@@ -13,7 +14,6 @@ use crate::{
     pause::{parse_pause_nlas, EthtoolPauseAttr},
     ring::{parse_ring_nlas, EthtoolRingAttr},
     tsinfo::{parse_tsinfo_nlas, EthtoolTsInfoAttr},
-    channel::{parse_channel_nlas, EthtoolChannelAttr},
     EthtoolHeader,
 };
 
@@ -90,6 +90,7 @@ pub enum EthtoolAttr {
     TsInfo(EthtoolTsInfoAttr),
     Fec(EthtoolFecAttr),
     Channel(EthtoolChannelAttr)
+    Channel(EthtoolChannelAttr),
 }
 
 impl Nla for EthtoolAttr {
@@ -269,10 +270,14 @@ impl EthtoolMessage {
 
     pub fn new_channel_get(iface_name: Option<&str>) -> Self {
         let nlas = match iface_name {
-            Some(s) => vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![
-                EthtoolHeader::DevName(s.to_string()),
-            ]))],
-            None => vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![]))],
+            Some(s) => {
+                vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![
+                    EthtoolHeader::DevName(s.to_string()),
+                ]))]
+            }
+            None => {
+                vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![]))]
+            }
         };
         EthtoolMessage {
             cmd: EthtoolCmd::ChannelGet,
@@ -281,9 +286,10 @@ impl EthtoolMessage {
     }
 
     pub fn new_channel_set(iface_name: &str) -> Self {
-        let nlas = vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![
-            EthtoolHeader::DevName(iface_name.to_string()),
-        ]))];
+        let nlas =
+            vec![EthtoolAttr::Channel(EthtoolChannelAttr::Header(vec![
+                EthtoolHeader::DevName(iface_name.to_string()),
+            ]))];
         EthtoolMessage {
             cmd: EthtoolCmd::ChannelSet,
             nlas,

@@ -14,6 +14,9 @@ use crate::{
     EthtoolPauseHandle, EthtoolRingHandle, EthtoolTsInfoHandle,
     EthtoolLinkModeHandle, EthtoolMessage, EthtoolPauseHandle,
     EthtoolRingHandle, EthtoolTsInfoHandle, EthtoolChannelHandle
+    try_ethtool, EthtoolChannelHandle, EthtoolCoalesceHandle, EthtoolError,
+    EthtoolFeatureHandle, EthtoolLinkModeHandle, EthtoolMessage,
+    EthtoolPauseHandle, EthtoolRingHandle, EthtoolTsInfoHandle,
 };
 
 #[derive(Clone, Debug)]
