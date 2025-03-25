@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 use ethtool::{
     EthtoolAttr, EthtoolChannelAttr, EthtoolCmd, EthtoolHeader, EthtoolMessage,
 };
