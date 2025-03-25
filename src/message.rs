@@ -89,7 +89,6 @@ pub enum EthtoolAttr {
     Coalesce(EthtoolCoalesceAttr),
     TsInfo(EthtoolTsInfoAttr),
     Fec(EthtoolFecAttr),
-    Channel(EthtoolChannelAttr)
     Channel(EthtoolChannelAttr),
 }
 
