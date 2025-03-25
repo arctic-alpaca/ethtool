@@ -20,7 +20,8 @@ impl EthtoolChannelHandle {
         EthtoolChannelGetRequest::new(self.0.clone(), iface_name)
     }
 
-    /// Set the ethtool Channels of a interface (equivalent to `ethtool -L eth1`)
+    /// Set the ethtool Channels of a interface (equivalent to `ethtool -L
+    /// eth1`)
     pub fn set(&mut self, iface_name: &str) -> EthtoolChannelSetRequest {
         EthtoolChannelSetRequest::new(self.0.clone(), iface_name)
     }
