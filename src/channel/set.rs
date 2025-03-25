@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-use futures::TryStream;
+use futures::StreamExt;
+use netlink_packet_core::{NetlinkMessage, NLM_F_ACK, NLM_F_REQUEST};
 use netlink_packet_generic::GenlMessage;
 
 use crate::{
-    ethtool_execute, EthtoolAttr, EthtoolChannelAttr, EthtoolError,
-    EthtoolHandle, EthtoolMessage,
+    try_ethtool, EthtoolAttr, EthtoolChannelAttr, EthtoolError, EthtoolHandle,
+    EthtoolMessage,
 };
 
 pub struct EthtoolChannelSetRequest {
@@ -49,10 +50,7 @@ impl EthtoolChannelSetRequest {
         self
     }
 
-    pub async fn execute(
-        self,
-    ) -> impl TryStream<Ok = GenlMessage<EthtoolMessage>, Error = EthtoolError>
-    {
+    pub async fn execute(self) -> Result<(), EthtoolError> {
         let EthtoolChannelSetRequest {
             mut handle,
             mut message,
@@ -83,6 +81,17 @@ impl EthtoolChannelSetRequest {
             ));
         }
 
-        ethtool_execute(&mut handle, false, message).await
+        let mut nl_msg =
+            NetlinkMessage::from(GenlMessage::from_payload(message));
+
+        nl_msg.header.flags = NLM_F_REQUEST | NLM_F_ACK;
+
+        let mut response = handle.request(nl_msg).await?;
+
+        while let Some(message) = response.next().await {
+            try_ethtool!(message);
+        }
+
+        Ok(())
     }
 }
